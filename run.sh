@@ -2,7 +2,6 @@
 [[ -n "$DEBUG" ]] && set -x
 domain="${DNS_DOMAIN:-test}"
 fallbackdns="${FALLBACK_DNS:-8.8.8.8}"
-hostmachineip="${HOSTMACHINE_IP:-172.17.0.1}"
 network="${NETWORK:-bridge}"
 naming="${NAMING:-default}"
 read -r -a extrahosts <<< "$EXTRA_HOSTS"
@@ -137,10 +136,6 @@ add_running_containers(){
     set_container_record "$id"
   done
 }
-add_wildcard_record(){
-  echo "address=/.${domain}/${hostmachineip}" > "${dnsmasq_path}hostmachine.conf"
-  echo -e "${GREEN}+ Added *.${domain} → ${hostmachineip}${RESET}"
-}
 set_fallback_dns(){
   sed -i "s/{{FALLBACK_DNS}}/${fallbackdns}/" "/etc/dnsmasq.conf"
   echo "Fallback DNS set to ${fallbackdns}"
@@ -166,7 +161,6 @@ EOF
 set -Eeo pipefail
 print_startup_msg
 set_fallback_dns
-add_wildcard_record
 add_running_containers
 set_extra_records
 start_dnsmasq

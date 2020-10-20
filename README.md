@@ -112,8 +112,6 @@ to match the value of the `DNS_DOMAIN` setting (default "test").
 
  * `DNS_DOMAIN`: set the local domain used. (default: **test**)
  * `FALLBACK_DNS`: set the DNS used for unknown hosts. (default: **8.8.8.8**)
- * `HOSTMACHINE_IP`: IP address of non-matching queries (default:
-   **172.17.0.1**)
  * `EXTRA_HOSTS`: list of extra records to create, space-separated string of
    host=ip pairs. (default: **''**)
  * `NAMING`: set to "full" to convert `_` to `-` (default: up to first `_` of
@@ -127,7 +125,6 @@ Example:
 ```sh
 docker run -d -v /var/run/docker.sock:/var/run/docker.sock \
   -e DNS_DOMAIN=docker \
-  -e HOSTMACHINE_IP=192.168.1.1 \
   -e NAMING=full \
   -e NETWORK=mynetwork \
   -e EXTRA_HOSTS="dockerhost=172.17.0.1 doubleclick.net=127.0.0.1" \
@@ -156,9 +153,6 @@ $ dig redis.test     # resolves to the IP of redis_test
 
 $ docker stop redis_test
 $ dig redis.test     # resolves to the IP of redis_local-V1
-
-$ docker stop redis_local-V1
-$ dig redis.test     # resolves to the IP of the host machine (default)
 ```
 
 ### NetworkManager on Ubuntu
