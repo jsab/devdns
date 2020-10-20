@@ -89,8 +89,12 @@ set_container_record(){
   ip=$(docker inspect -f "{{with index .NetworkSettings.Networks \"${cnetwork}\"}}{{.IPAddress}}{{end}}" "$cid" | head -n1)
   name=$(get_name "$cid")
   safename=$(get_safe_name "$name")
-  record="${safename}.${domain}"
-  set_record "$record" "$ip"
+  if [[ -z "$ip" ]]; then
+    echo -e "${YELLOW}- Could not get IP for container $name, probably not on network $network, skipping..."
+  else
+    record="${safename}.${domain}"
+    set_record "$record" "$ip"
+  fi
 }
 set_extra_records(){
   local host ip
